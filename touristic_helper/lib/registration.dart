@@ -140,7 +140,7 @@ class _RegistrationState extends State<Registration> {
                         // the form is invalid.
                         if (_formKey.currentState!.validate()) {
                           new_user(email, password);
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=> LoadingScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> Auth()));
                         }
                       },
                       child: const Text('Зарегистрироваться'),

@@ -50,7 +50,7 @@ async def login():
             return Response(str("Invalid data"), 200)
 
 @app.route('/api/register', methods=['POST'])
-async def login():
+async def register():
     email = str(request.json['email'])
     password = str(request.json['password'])
     print(email, password)
