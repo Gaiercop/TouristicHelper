@@ -33,23 +33,32 @@ async def upload_file():
 async def login():
     email = str(request.json['email'])
     password = str(request.json['password'])
+
     print(email, password)
     con = pymysql.connect(host = 'localhost', user = 'root',
     password = '523523523g', database = 'touristic_helper')
+
     with con:
         cur = con.cursor()
         cur.execute(f'SELECT password FROM users WHERE email = "{email}"')
-
         result = cur.fetchone()
 
         if result == None: 
+            cur.close()
             return Response(str("Invalid data"), 200)
+
         else:
             result = tuple(result)
             password_res = result[0]
+
             if password_res != password:
+                cur.close()
                 return Response(str("Invalid data"), 200)
-            elif password_res == password: return Response(str("True"), 200)
+
+            elif password_res == password: 
+                cur.commit()
+                cur.close()
+                return Response(str("True"), 200)
 
 @app.route('/api/register', methods=['POST'])
 async def register():
@@ -66,8 +75,11 @@ async def register():
         
         result = cur.fetchone()
         if result == None:
+            cur.commit()
+            cur.close()
             return Response(str("True"), 200)
         else:
+            cur.close()
             return Response(str("Invalid data"), 200)
 
 if __name__ == '__main__':
