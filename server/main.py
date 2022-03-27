@@ -40,26 +40,30 @@ async def login():
         cur = con.cursor()
         cur.execute(f'SELECT password FROM users WHERE email = "{email}"')
 
-        result = tuple(cur.fetchone())
-        if result != None:
+        result = cur.fetchone()
+
+        if result == None: 
+            return Response(str("Invalid data"), 200)
+        else:
+            result = tuple(result)
             password_res = result[0]
             if password_res != password:
                 return Response(str("Invalid data"), 200)
             elif password_res == password: return Response(str("True"), 200)
-        else:
-            return Response(str("Invalid data"), 200)
 
 @app.route('/api/register', methods=['POST'])
 async def register():
     email = str(request.json['email'])
     password = str(request.json['password'])
-    print(email, password)
+
     con = pymysql.connect(host = 'localhost', user = 'root',
     password = '523523523g', database = 'touristic_helper')
     with con:
         cur = con.cursor()
-        cur.execute(f'INSERT users(email, password, email_submit, pass_rescure_key) VALUES ("{email}", "{password}", 0, 0)')
+        cur.execute(f'INSERT INTO users(email, password, email_submit, pass_rescure_key) VALUES ("{email}", "{password}", 0, 0)')
 
+        print(f'INSERT INTO users(email, password, email_submit, pass_rescure_key) VALUES ("{email}", "{password}", 0, 0)')
+        
         result = cur.fetchone()
         if result == None:
             return Response(str("True"), 200)
