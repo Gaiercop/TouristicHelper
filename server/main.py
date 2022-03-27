@@ -56,7 +56,6 @@ async def login():
                 return Response(str("Invalid data"), 200)
 
             elif password_res == password: 
-                cur.commit()
                 cur.close()
                 return Response(str("True"), 200)
 
@@ -75,7 +74,7 @@ async def register():
         
         result = cur.fetchone()
         if result == None:
-            cur.commit()
+            con.commit()
             cur.close()
             return Response(str("True"), 200)
         else:
