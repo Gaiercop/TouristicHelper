@@ -49,6 +49,23 @@ async def login():
         else:
             return Response(str("Invalid data"), 200)
 
+@app.route('/api/register', methods=['POST'])
+async def login():
+    email = str(request.json['email'])
+    password = str(request.json['password'])
+    print(email, password)
+    con = pymysql.connect(host = 'localhost', user = 'root',
+    password = '523523523g', database = 'touristic_helper')
+    with con:
+        cur = con.cursor()
+        cur.execute(f'INSERT users(email, password, email_submit, pass_rescure_key) VALUES ({email}, {password}, 0, 0)')
+
+        result = tuple(cur.fetchone())
+        if result == None:
+            return Response(str("True"), 200)
+        else:
+            return Response(str("Invalid data"), 200)
+
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     loop.run_until_complete(app.run(host='0.0.0.0', port=5000))

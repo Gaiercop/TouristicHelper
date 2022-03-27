@@ -1,22 +1,21 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:touristic_helper/auth.dart';
 import 'package:touristic_helper/loading.dart';
 import 'package:touristic_helper/main.dart';
 import 'package:mysql1/mysql1.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:touristic_helper/password.dart';
-import 'package:touristic_helper/registration.dart';
 
-class Auth extends StatefulWidget {
-  const Auth({Key? key}) : super(key: key);
+class Password extends StatefulWidget {
+  const Password({Key? key}) : super(key: key);
 
   @override
-  _AuthState createState() => _AuthState();
+  _PasswordState createState() => _PasswordState();
 }
 
-class _AuthState extends State<Auth> {
+class _PasswordState extends State<Password> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String email = "", password = "";
 
@@ -25,26 +24,6 @@ class _AuthState extends State<Auth> {
     setState(() {
       _showPassword = !_showPassword;
     });
-  }
-
-  void check_data(String email, String password) async {
-    final result = await http.post(
-      Uri.parse("http://ovz1.ss-di.m29on.vps.myjino.ru/api/login"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'email': email,
-        'password': password
-      }));
-    if (result.body != "True") {
-      print(result.body);
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Auth()));
-    }
-    else {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> LoadImage()));
-    }
-
   }
 
   @override
@@ -66,10 +45,74 @@ class _AuthState extends State<Auth> {
                   fillColor: Color(0xff75007f)
               ),
               validator: (String? value) {
-                if (value == null || value.isEmpty || value.contains("@") == false || value.length < 4) {
+                if (value == null || value.isEmpty ||
+                    value.contains("@") == false || value.length < 4) {
                   return 'Введите вашу реальную почту';
                 }
                 email = value;
+              },
+            ),
+            const SizedBox(height: 25),
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Validate will return true if the form is valid, or false if
+                    // the form is invalid.
+                    if (_formKey.currentState!.validate()) {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> SubmitPassword()));
+                    }
+                  },
+                  child: const Text('Выслать код'),
+                )
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SubmitPassword extends StatefulWidget {
+  const SubmitPassword({Key? key}) : super(key: key);
+
+  @override
+  _SubmitPasswordState createState() => _SubmitPasswordState();
+}
+
+class _SubmitPasswordState extends State<SubmitPassword> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  String email = "", password = "";
+
+  bool _showPassword = false;
+  void _togglevisibility() {
+    setState(() {
+      _showPassword = !_showPassword;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xff44004a),
+      body: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            TextFormField(
+              obscureText: !_showPassword,
+              decoration: InputDecoration(
+                icon: Icon(Icons.lock),
+                hintText: 'Введите код подтверждения',
+                hintStyle: const TextStyle(fontWeight: FontWeight.bold),
+                border: OutlineInputBorder(),
+                fillColor: Color(0xff75007f),
+              ),
+              validator: (String? value) {
+                // TODO: добавить проверку кода подтверждения
               },
             ),
             const SizedBox(height: 25),
@@ -77,7 +120,7 @@ class _AuthState extends State<Auth> {
               obscureText: !_showPassword,
               decoration: InputDecoration(
                 icon: Icon(Icons.lock),
-                hintText: 'Введите ваш пароль',
+                hintText: 'Введите новый пароль',
                 hintStyle: const TextStyle(fontWeight: FontWeight.bold),
                 border: OutlineInputBorder(),
                 fillColor: Color(0xff75007f),
@@ -100,42 +143,7 @@ class _AuthState extends State<Auth> {
                 password = value;
               },
             ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 10),
-                  ),
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> Registration()));
-                    },
-                    child: const Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                          "Зарегистрироваться",
-                          style: TextStyle(fontSize: 16.0),
-                          textAlign: TextAlign.right
-                      ),
-                    )),
-                TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 10),
-                    ),
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> Password()));
-                    },
-                    child: const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                          "Забыли пароль?",
-                          style: TextStyle(fontSize: 16.0),
-                          textAlign: TextAlign.left
-                      ),
-                    )),
-              ],
-            ),
+            const SizedBox(height: 25),
             Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
@@ -143,17 +151,17 @@ class _AuthState extends State<Auth> {
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
                     if (_formKey.currentState!.validate()) {
-                      check_data(email, password);
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> LoadingScreen()));
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => Auth()));
                     }
                   },
-                  child: const Text('Войти'),
-
+                  child: const Text('Подтвердить смену пароля'),
                 )
             )
           ],
-        )
-      )
+        ),
+      ),
     );
   }
 }
+
