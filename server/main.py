@@ -60,7 +60,7 @@ async def register():
         cur = con.cursor()
         cur.execute(f'INSERT users(email, password, email_submit, pass_rescure_key) VALUES ("{email}", "{password}", 0, 0)')
 
-        result = tuple(cur.fetchone())
+        result = cur.fetchone()
         if result == None:
             return Response(str("True"), 200)
         else:
