@@ -38,7 +38,6 @@ class _PasswordState extends State<Password> {
         },
         body: jsonEncode(<String, String>{
           'email': email,
-          'password': password
         }));
     if (result.body != "True") {
       print(result.body);
@@ -48,6 +47,18 @@ class _PasswordState extends State<Password> {
     else {
       Navigator.push(context, MaterialPageRoute(builder: (context) => SubmitPassword()));
     }
+  }
+
+  void send_code(String email) async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => LoadingScreen()));
+    final result = await http.post(
+        Uri.parse("http://ovz1.ss-di.m29on.vps.myjino.ru/api/send_code"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+        }));
   }
 
   @override
@@ -85,6 +96,7 @@ class _PasswordState extends State<Password> {
                     // the form is invalid.
                     if (_formKey.currentState!.validate()) {
                       is_email_exist(email);
+                      send_code(email);
                     }
                   },
                   child: const Text('Выслать код'),

@@ -8,6 +8,11 @@ from pathlib import Path
 from nn import nn
 import asyncio, os, json
 import pymysql
+import secrets, string
+
+import email
+
+from server.email import send_mail_async
 
 app = Flask(__name__)
 
@@ -99,6 +104,14 @@ async def email_exist():
             cur.close()
             return Response(str("True"), 200)
 
+@app.route('/api/send_code', methods=['POST'])
+async def send_code():
+    alphabet = string.ascii_letters + string.digits
+    email = str(request.json['email'])
+    key = ''.join(secrets.choice(alphabet) for i in range(6))
+
+    send_mail_async("gaiercop@gmail.com", [email], "Ваш код подтверждения", f"Ваш код: {key}")
+    return Response(str("True"), 200)
 
 
 if __name__ == '__main__':
