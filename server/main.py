@@ -10,9 +10,7 @@ import asyncio, os, json
 import pymysql
 import secrets, string
 
-import email
-
-from server.email import send_mail_async
+from send import send_mail_async
 
 app = Flask(__name__)
 
