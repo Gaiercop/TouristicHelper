@@ -108,7 +108,7 @@ async def send_code():
     email = str(request.json['email'])
     key = ''.join(secrets.choice(alphabet) for i in range(6))
 
-    send_mail_async("gaiercop@gmail.com", [email], "Ваш код подтверждения", f"Ваш код: {key}")
+    await send_mail_async("gaiercop@gmail.com", [email], "Ваш код подтверждения", f"Ваш код: {key}")
     return Response(str("True"), 200)
 
 
