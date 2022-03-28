@@ -28,6 +28,7 @@ class _RegistrationState extends State<Registration> {
   }
 
   void new_user(String email, String password) async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => LoadingScreen()));
     final result = await http.post(
         Uri.parse("http://ovz1.ss-di.m29on.vps.myjino.ru/api/register"),
         headers: <String, String>{
@@ -140,7 +141,6 @@ class _RegistrationState extends State<Registration> {
                         // the form is invalid.
                         if (_formKey.currentState!.validate()) {
                           new_user(email, password);
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=> Auth()));
                         }
                       },
                       child: const Text('Зарегистрироваться'),

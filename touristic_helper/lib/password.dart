@@ -7,6 +7,9 @@ import 'package:touristic_helper/main.dart';
 import 'package:mysql1/mysql1.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:touristic_helper/registration.dart';
+
+String email = "";
 
 class Password extends StatefulWidget {
   const Password({Key? key}) : super(key: key);
@@ -24,6 +27,27 @@ class _PasswordState extends State<Password> {
     setState(() {
       _showPassword = !_showPassword;
     });
+  }
+
+  void is_email_exist(String email) async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => LoadingScreen()));
+    final result = await http.post(
+        Uri.parse("http://ovz1.ss-di.m29on.vps.myjino.ru/api/email_exist"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'password': password
+        }));
+    if (result.body != "True") {
+      print(result.body);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Registration()));
+    }
+    else {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => SubmitPassword()));
+    }
   }
 
   @override
@@ -60,7 +84,7 @@ class _PasswordState extends State<Password> {
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
                     if (_formKey.currentState!.validate()) {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> SubmitPassword()));
+                      is_email_exist(email);
                     }
                   },
                   child: const Text('Выслать код'),
@@ -83,13 +107,34 @@ class SubmitPassword extends StatefulWidget {
 class _SubmitPasswordState extends State<SubmitPassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String email = "", password = "";
+  String password = "", confirm_code = "";
 
   bool _showPassword = false;
   void _togglevisibility() {
     setState(() {
       _showPassword = !_showPassword;
     });
+  }
+
+  void change_password(String email, String code, String password) async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => LoadingScreen()));
+    final result = await http.post(
+        Uri.parse("http://ovz1.ss-di.m29on.vps.myjino.ru/api/change_password"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'password': password
+        }));
+    if (result.body != "True") {
+      print(result.body);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Registration()));
+    }
+    else {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Auth()));
+    }
   }
 
   @override
@@ -112,7 +157,10 @@ class _SubmitPasswordState extends State<SubmitPassword> {
                 fillColor: Color(0xff75007f),
               ),
               validator: (String? value) {
-                // TODO: добавить проверку кода подтверждения
+                if (value == null || value.isEmpty) {
+                  return 'Введите код подтверждения с почты';
+                }
+                confirm_code = value;
               },
             ),
             const SizedBox(height: 25),
@@ -151,8 +199,7 @@ class _SubmitPasswordState extends State<SubmitPassword> {
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
                     if (_formKey.currentState!.validate()) {
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => Auth()));
+                      change_password(email, confirm_code, password);
                     }
                   },
                   child: const Text('Подтвердить смену пароля'),

@@ -81,6 +81,26 @@ async def register():
             cur.close()
             return Response(str("Invalid data"), 200)
 
+@app.route('/api/email_exist', methods=['POST'])
+async def email_exist():
+    email = str(request.json['email'])
+
+    con = pymysql.connect(host = 'localhost', user = 'root',
+    password = '523523523g', database = 'touristic_helper')
+    with con:
+        cur = con.cursor()
+        cur.execute(f'SELECT * FROM users WHERE email = "{email}"')
+
+        result = cur.fetchone()
+        if result == None:
+            cur.close()
+            return Response(str("False"), 200)
+        else:
+            cur.close()
+            return Response(str("True"), 200)
+
+
+
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     loop.run_until_complete(app.run(host='0.0.0.0', port=5000))
