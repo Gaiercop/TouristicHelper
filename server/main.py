@@ -109,6 +109,12 @@ async def send_code():
     key = ''.join(secrets.choice(alphabet) for i in range(6))
 
     await send_mail_async("gaiercop@gmail.com", [email], "Ваш код подтверждения", f"Ваш код: {key}")
+    
+    con = pymysql.connect(host = 'localhost', user = 'root',
+    password = '523523523g', database = 'touristic_helper')
+    with con:
+        cur = con.cursor()
+        cur.execute(f'UPDATE users SET pass_rescure_key = {key} WHERE email = "{email}"')
     return Response(str("True"), 200)
 
 

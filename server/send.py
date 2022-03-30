@@ -5,7 +5,7 @@ import sys
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-MAIL_PARAMS = {'TLS': True, 'host': '127.0.0.1', 'password': '523523523Ge!', 'user': 'gaiercop@gmail.com', 'port': 587}
+MAIL_PARAMS = {'TLS': True, 'host': 'smtp.gmail.com', 'password': 'cmxmgigksbtjxgzp', 'user': 'gaiercop@gmail.com', 'port': 587}
 
 if sys.platform == 'win32':
     loop = asyncio.get_event_loop()
@@ -72,7 +72,7 @@ async def send_mail_async(sender, to, subject, text, textType='plain', **params)
 
 
 #if __name__ == "__main__":
-#    email = "xxxxxxxx"
+#    email = "gaiercopcyetgaiercopcyet@gmail.com"
 #    co1 = send_mail_async(email,
 #              [email],
 #              "Test 1",
