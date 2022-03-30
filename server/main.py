@@ -104,12 +104,11 @@ async def email_exist():
 
 @app.route('/api/send_code', methods=['POST'])
 async def send_code():
-    alphabet = string.ascii_letters + string.digits
+    alphabet = "1234567890"
     email = str(request.json['email'])
     key = ''.join(secrets.choice(alphabet) for i in range(6))
 
-    await send_mail_async("gaiercop@gmail.com", [email], "Ваш код подтверждения", f"Ваш код: {key}")
-    
+    await send_mail_async("gaiercop@gmail.com", [email], "Your submit code", f"Your code: {key}") 
     con = pymysql.connect(host = 'localhost', user = 'root',
     password = '523523523g', database = 'touristic_helper')
     with con:
