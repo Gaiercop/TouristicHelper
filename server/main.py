@@ -133,7 +133,7 @@ async def change_password():
 
     with con:
         cur = con.cursor()
-        cur.execute(f'SELECT email FROM users WHERE code = {code}')
+        cur.execute(f'SELECT email FROM users WHERE pass_rescure_key = {code}')
 
         result = cur.fetchone()
         if result == None:
@@ -146,6 +146,7 @@ async def change_password():
 
             return Response(str("True"), 200)
         else:
+            print(result[0])
             return Response(str("Invalid data"), 200)
 
 
