@@ -114,6 +114,9 @@ async def send_code():
     with con:
         cur = con.cursor()
         cur.execute(f'UPDATE users SET pass_rescure_key = {key} WHERE email = "{email}"')
+        cur.close()
+        con.commit()
+        
     return Response(str("True"), 200)
 
 
