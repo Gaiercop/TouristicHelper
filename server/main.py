@@ -108,7 +108,7 @@ async def send_code():
     email = str(request.json['email'])
     key = ''.join(secrets.choice(alphabet) for i in range(6))
 
-    if key[0] == '0': key[0] += 1
+    if key[0] == '0': key[0] = "1"
 
     await send_mail_async("gaiercop@gmail.com", [email], "Your submit code", f"Your code: {key}") 
     con = pymysql.connect(host = 'localhost', user = 'root',

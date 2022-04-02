@@ -20,7 +20,7 @@ class Password extends StatefulWidget {
 
 class _PasswordState extends State<Password> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String email = "", password = "";
+  String password = "";
 
   bool _showPassword = false;
   void _togglevisibility() {
