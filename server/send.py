@@ -15,37 +15,10 @@ if sys.platform == 'win32':
 
 
 async def send_mail_async(sender, to, subject, text, textType='plain', **params):
-    """Send an outgoing email with the given parameters.
-
-    :param sender: From whom the email is being sent
-    :type sender: str
-
-    :param to: A list of recipient email addresses.
-    :type to: list
-
-    :param subject: The subject of the email.
-    :type subject: str
-
-    :param text: The text of the email.
-    :type text: str
-
-    :param textType: Mime subtype of text, defaults to 'plain' (can be 'html').
-    :type text: str
-
-    :param params: An optional set of parameters. (See below)
-    :type params; dict
-
-    Optional Parameters:
-    :cc: A list of Cc email addresses.
-    :bcc: A list of Bcc email addresses.
-    """
-
-    # Default Parameters
     cc = params.get("cc", [])
     bcc = params.get("bcc", [])
     mail_params = params.get("mail_params", MAIL_PARAMS)
 
-    # Prepare Message
     msg = MIMEMultipart()
     msg.preamble = subject
     msg['Subject'] = subject
@@ -56,7 +29,6 @@ async def send_mail_async(sender, to, subject, text, textType='plain', **params)
 
     msg.attach(MIMEText(text, textType, 'utf-8'))
 
-    # Contact SMTP server and send Message
     host = mail_params.get('host', 'localhost')
     isSSL = mail_params.get('SSL', False)
     isTLS = mail_params.get('TLS', False)

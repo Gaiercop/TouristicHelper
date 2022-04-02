@@ -108,16 +108,46 @@ async def send_code():
     email = str(request.json['email'])
     key = ''.join(secrets.choice(alphabet) for i in range(6))
 
+    if key[0] == '0': key[0] += 1
+
     await send_mail_async("gaiercop@gmail.com", [email], "Your submit code", f"Your code: {key}") 
     con = pymysql.connect(host = 'localhost', user = 'root',
     password = '523523523g', database = 'touristic_helper')
     with con:
         cur = con.cursor()
         cur.execute(f'UPDATE users SET pass_rescure_key = {key} WHERE email = "{email}"')
+
         cur.close()
         con.commit()
-        
+
     return Response(str("True"), 200)
+
+@app.route('/api/change_password', methods=['POST'])
+async def change_password():
+    email = str(request.json['email'])
+    password = str(request.json['password'])
+    code = str(request.json['code'])
+
+    con = pymysql.connect(host = 'localhost', user = 'root',
+    password = '523523523g', database = 'touristic_helper')
+
+    with con:
+        cur = con.cursor()
+        cur.execute(f'SELECT email FROM users WHERE code = {code}')
+
+        result = cur.fetchone()
+        if result == None:
+            cur.close()
+            return Response(str("Invalid data"), 200)
+        elif result[0] == email: 
+            cur.execute(f'UPDATE users SET password = "{password}" WHERE email = "{email}"')
+            cur.close()
+            con.commit()
+
+            return Response(str("True"), 200)
+        else:
+            return Response(str("Invalid data"), 200)
+
 
 
 if __name__ == '__main__':

@@ -137,7 +137,8 @@ class _SubmitPasswordState extends State<SubmitPassword> {
         },
         body: jsonEncode(<String, String>{
           'email': email,
-          'password': password
+          'password': password,
+          'code' : code
         }));
     if (result.body != "True") {
       print(result.body);
