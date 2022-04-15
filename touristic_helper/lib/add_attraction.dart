@@ -56,7 +56,7 @@ class AddAttraction extends StatelessWidget {
                   // Validate will return true if the form is valid, or false if
                   // the form is invalid.
                   if (_formKey.currentState!.validate()) {
-                    add_attraction(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoadImage()));
                   }
                 },
                 child: const Text('Подтвердить смену пароля'),

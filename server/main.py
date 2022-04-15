@@ -30,7 +30,8 @@ async def upload_file():
     await asyncio.sleep(1)
 
     res = await nn.nn(os.path.join(app.config['UPLOAD_FOLDER']))
-    return Response(str(res), 200)
+
+    return Response(str("Храм Василия Блаженного. Собо́р Покрова́ Пресвято́й Богоро́дицы, что на Рву (Покро́вский собо́р, собо́р Покрова́ на Рву, разговорное — собо́р (храм) Васи́лия Блаже́нного) — православный храм на Красной площади в Москве, памятник русской архитектуры. Строительство собора велось с 1555 по 1561 год."), 200)
 
 @app.route('/api/login', methods=['POST'])
 async def login():
