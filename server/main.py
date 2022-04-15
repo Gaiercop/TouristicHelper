@@ -17,7 +17,7 @@ app = Flask(__name__)
 not_used_ids = [0]
 dir_path = pathlib.Path.cwd()
 
-UPLOAD_FOLDER = Path(dir_path, 'uploads')
+UPLOAD_FOLDER = Path(dir_path, 'uploads', 'folder1')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/api/upload', methods=['POST'])

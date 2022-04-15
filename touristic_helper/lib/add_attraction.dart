@@ -21,6 +21,7 @@ class AddAttraction extends StatelessWidget {
           'title' : title
         }));
 
+
       Navigator.push(context, MaterialPageRoute(builder: (context) => LoadImage()));
   }
 
