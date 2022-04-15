@@ -149,6 +149,23 @@ async def change_password():
             print(result[0])
             return Response(str("Invalid data"), 200)
 
+@app.route('/api/add_attraction', methods=['POST'])
+async def change_password():
+    title = str(request.json['title'])
+    filename = str(request.json['title'])
+
+    con = pymysql.connect(host = 'localhost', user = 'root',
+    password = '523523523g', database = 'touristic_helper')
+
+    with con:
+        cur = con.cursor()
+        cur.execute(f'INSERT INTO attractions (name, filename, northern_latitude, eastern_longitude, article_link) VALUES ({title}, {title}, 0.0, 0.0, ""')
+
+        cur.close()
+        con.commit()
+        
+        return Response(str("True"), 200)
+
 
 
 if __name__ == '__main__':

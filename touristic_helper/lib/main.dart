@@ -9,6 +9,7 @@ import 'package:path/path.dart';
 import 'package:async/async.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:touristic_helper/add_attraction.dart';
 import 'package:touristic_helper/auth.dart';
 import 'package:touristic_helper/loading.dart';
 
@@ -220,6 +221,13 @@ class ShowingResult extends State<ShowResult>{
                   Navigator.push(context, MaterialPageRoute(builder: (context)=> LoadImage()));
                 },
                 child: const Text("Вернуться в главное меню")
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> AddAttraction()));
+                },
+                child: const Text("Добавить памятник")
             )
           ],
         )
