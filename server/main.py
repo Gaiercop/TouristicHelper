@@ -151,7 +151,7 @@ async def change_password():
             return Response(str("Invalid data"), 200)
 
 @app.route('/api/add_attraction', methods=['POST'])
-async def change_password():
+async def add_attraction():
     title = str(request.json['title'])
     filename = str(request.json['title'])
 
